@@ -1,12 +1,13 @@
 // lib/api.ts
+
 import axios from 'axios';
-import type { Note, CreateNote, Tag } from '../types/note';
+import type { Note, CreateNote, Tag } from '@/types/note';
 
 const PER_PAGE_DEFAULT = 12;
 const BASE_URL =
-  (process.env.NEXT_PUBLIC_NOTEHUB_BASE_URL as string) ??
+  process.env.NEXT_PUBLIC_NOTEHUB_BASE_URL ??
   'https://notehub-public.goit.study/api';
-const TOKEN = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN as string | undefined;
+const TOKEN = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -42,6 +43,7 @@ export async function fetchNotes({
   const params: Record<string, unknown> = { page, perPage, search };
   if (tag) params.tag = tag;
   if (sortBy) params.sortBy = sortBy;
+
   const { data } = await api.get<FetchNotesResponse>('/notes', { params });
   return data;
 }

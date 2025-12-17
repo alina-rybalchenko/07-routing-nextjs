@@ -1,4 +1,10 @@
 // app/loading.tsx
+import css from '@/components/Loader/Loader.module.css';
+
 export default function Loading() {
-  return <p style={{ padding: 24 }}>Loading, please wait...</p>;
+  return (
+    <div className={css.loaderWrapper}>
+      <div className={css.loaderBar}></div>
+    </div>
+  );
 }
