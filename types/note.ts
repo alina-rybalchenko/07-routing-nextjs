@@ -1,4 +1,3 @@
-// types/note.ts
 export type Tag = 'Work' | 'Personal' | 'Meeting' | 'Shopping' | 'Todo';
 
 export interface Note {
@@ -8,10 +7,4 @@ export interface Note {
   tag: Tag;
   createdAt: string;
   updatedAt: string;
-}
-
-export interface CreateNote {
-  title: string;
-  content?: string;
-  tag: Tag;
 }

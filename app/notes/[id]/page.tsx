@@ -1,5 +1,5 @@
 // app/notes/[id]/page.tsx
-import React from 'react';
+
 import {
   HydrationBoundary,
   QueryClient,

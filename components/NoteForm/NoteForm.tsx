@@ -1,13 +1,11 @@
 // components/NoteForm/NoteForm.tsx
-'use client';
-
 import { Formik, Form, Field, ErrorMessage, type FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { useId } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import styles from './NoteForm.module.css';
 import { createNote } from '../../lib/api';
-import type { CreateNote, Note, Tag } from '../../types/note';
+import Error from '@/components/Error/Error';
 
 interface NoteFormProps {
   onSuccessClose: () => void;
@@ -17,7 +15,7 @@ interface NoteFormProps {
 interface NoteFormValues {
   title: string;
   content: string;
-  tag: Tag;
+  tag: string;
 }
 
 const initialValues: NoteFormValues = {
@@ -33,7 +31,7 @@ const validationSchema = Yup.object().shape({
     .required('Title is required'),
   content: Yup.string().max(500, 'Content is too long'),
   tag: Yup.string()
-    .oneOf(['Todo', 'Work', 'Personal', 'Meeting', 'Shopping'])
+    .oneOf(['Work', 'Personal', 'Meeting', 'Shopping', 'Todo'])
     .required('Tag is required'),
 });
 
@@ -41,7 +39,7 @@ export default function NoteForm({ onSuccessClose, onCancel }: NoteFormProps) {
   const id = useId();
   const queryClient = useQueryClient();
 
-  const mutation = useMutation<Note, Error, CreateNote>({
+  const { mutate, isError, isPending } = useMutation({
     mutationFn: createNote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
@@ -53,11 +51,11 @@ export default function NoteForm({ onSuccessClose, onCancel }: NoteFormProps) {
     values: NoteFormValues,
     actions: FormikHelpers<NoteFormValues>
   ) => {
-    mutation.mutate(
-      { title: values.title, content: values.content, tag: values.tag },
-      { onSettled: () => actions.setSubmitting(false) }
-    );
-    actions.resetForm();
+    mutate(values, {
+      onSuccess: () => {
+        actions.resetForm();
+      },
+    });
   };
 
   return (
@@ -108,12 +106,13 @@ export default function NoteForm({ onSuccessClose, onCancel }: NoteFormProps) {
               name="tag"
               className={styles.select}
             >
-              <option value="Todo">Todo</option>
               <option value="Work">Work</option>
               <option value="Personal">Personal</option>
               <option value="Meeting">Meeting</option>
               <option value="Shopping">Shopping</option>
+              <option value="Todo">Todo</option>
             </Field>
+
             <ErrorMessage
               name="tag"
               component="span"
@@ -132,10 +131,11 @@ export default function NoteForm({ onSuccessClose, onCancel }: NoteFormProps) {
             <button
               type="submit"
               className={styles.submitButton}
-              disabled={!isValid || !dirty}
+              disabled={!(isValid && dirty) || isPending}
             >
-              Create
+              {isPending ? 'Creating...' : 'Create note'}
             </button>
+            {isError && <Error />}
           </div>
         </Form>
       )}

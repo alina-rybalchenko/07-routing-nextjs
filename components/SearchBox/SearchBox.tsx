@@ -1,5 +1,4 @@
 // components/SearchBox/SearchBox.tsx
-'use client';
 
 import styles from './SearchBox.module.css';
 
@@ -16,7 +15,6 @@ export default function SearchBox({ search, onChange }: SearchBoxProps) {
       className={styles.input}
       type="text"
       placeholder="Search notes"
-      aria-label="Search notes"
     />
   );
 }

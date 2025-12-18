@@ -1,21 +1,25 @@
-// app/notes/filter/@sidebar/default.tsx
 import Link from 'next/link';
 import css from './SidebarNotes.module.css';
 
-const TAGS = ['all', 'Work', 'Personal', 'Meeting', 'Shopping', 'Todo'];
+export default async function SidebarNotes() {
+  const tags = ['Work', 'Personal', 'Meeting', 'Shopping', 'Todo'];
 
-export default function SidebarNotes() {
   return (
-    <aside className={css.sidebar}>
+    <div className={css.sidebar}>
       <ul className={css.menuList}>
-        {TAGS.map(tag => (
+        <li className={css.menuItem}>
+          <Link href={`/notes/filter/all`} className={css.menuLink}>
+            All notes
+          </Link>
+        </li>
+        {tags.map(tag => (
           <li key={tag} className={css.menuItem}>
             <Link href={`/notes/filter/${tag}`} className={css.menuLink}>
-              {tag === 'all' ? 'All notes' : tag}
+              {tag}
             </Link>
           </li>
         ))}
       </ul>
-    </aside>
+    </div>
   );
 }
