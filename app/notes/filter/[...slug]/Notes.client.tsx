@@ -79,11 +79,13 @@ export default function NotesClient({ tag }: NotesClientProps) {
         </Modal>
       )}
       {totalPages > 0 && (
-        <Pagination
-          page={page}
-          totalPages={totalPages}
-          onPageChange={setPage}
-        />
+        <div className={css.bottomPagination}>
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
+        </div>
       )}
     </section>
   );

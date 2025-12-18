@@ -7,13 +7,13 @@ import NotesClient from './Notes.client';
 import { fetchNotes } from '@/lib/api';
 
 interface PageProps {
-  params: Promise<{ tag?: string[] }>;
+  params: Promise<{ slug: string[] }>;
 }
 
 export default async function Page({ params }: PageProps) {
-  const { tag: tagParams } = await params;
+  const { slug } = await params;
 
-  const tag = tagParams?.[0] === 'all' ? undefined : tagParams?.[0];
+  const tag = slug[0] === 'all' ? undefined : slug[0];
 
   const queryClient = new QueryClient();
 
